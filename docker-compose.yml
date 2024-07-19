@@ -25,6 +25,17 @@ services:
       - redis
     environment:
       - REDIS_HOST=redis
+  
+  tests:
+    build: .
+    command: pytest
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - web
+    environment:
+      - REDIS_HOST=redis
 
 networks:
   default:
