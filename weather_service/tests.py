@@ -126,3 +126,25 @@ def test_get_weather_data(api_client, user_id, city_ids, mocker):
     assert response_get.data['total-cities'] == len(city_ids)
     assert response_get.data['progress'] == len(city_ids)
     assert response_get.data['progress percentage'] == 100.0
+
+@pytest.mark.django_db
+def test_get_weather_data_non_existent_user(api_client):
+    non_existent_user_id = "non_existent_user"
+    url_get = reverse('weatherdata-detail', args=[non_existent_user_id])
+
+    response_get = api_client.get(url_get)
+
+    assert response_get.status_code == status.HTTP_404_NOT_FOUND
+
+@pytest.mark.django_db
+def test_post_weather_data_empty_city_ids(api_client, user_id):
+    url = reverse('weatherdata')
+    city_ids = []
+
+    response = api_client.post(url, {
+        "user_id": user_id,
+        "city_ids": city_ids
+    }, format='json')
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
