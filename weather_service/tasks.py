@@ -4,6 +4,7 @@ import redis
 from celery import shared_task
 from django.conf import settings
 from .models import WeatherData
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,10 @@ def fetch_weather_data(self, user_id, city_ids):
     redis_client.set(redis_key_total, total_cities)
     
     for i, city_id in enumerate(city_ids):
+        if i > 0 and i % 60 == 0:
+            # Wait for a minute before making the next batch of requests
+            time.sleep(60)
+        
         weather_data = get_weather_data(api_key, city_id)
         if weather_data:
             save_weather_data(user_id, city_id, weather_data)

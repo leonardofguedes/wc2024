@@ -28,12 +28,13 @@ services:
   
   tests:
     build: .
-    command: pytest
+    command: pytest --maxfail=1 --disable-warnings -v
     volumes:
       - .:/app
     depends_on:
-      - redis
       - web
+      - redis
+      - celery
     environment:
       - REDIS_HOST=redis
 

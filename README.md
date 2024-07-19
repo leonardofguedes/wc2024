@@ -35,7 +35,10 @@ docker-compose up --build
 ```
 
 
-This will build the Docker images and start the application with all the necessary services (Django, Celery, Redis).
+This will build the Docker images 
+and start the application with all the necessary services (Django, Celery, Redis).
+
+The tests will be run automatically
 
 Apply database migrations:
 

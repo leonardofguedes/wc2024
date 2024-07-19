@@ -7,6 +7,9 @@ from .models import WeatherData
 from .tasks import fetch_weather_data
 from unittest.mock import patch
 import os
+import redis
+from django.conf import settings
+
 
 load_dotenv()
 
@@ -100,7 +103,12 @@ def test_get_weather_data(api_client, user_id, city_ids, mocker):
 
     assert response_post.status_code == status.HTTP_201_CREATED
 
-    # Create WeatherData entries manually
+    redis_key_total = f"weather_total_{user_id}"
+    redis_key_progress = f"weather_progress_{user_id}"
+    redis_client = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0)
+    redis_client.set(redis_key_total, len(city_ids))
+    redis_client.set(redis_key_progress, len(city_ids))
+
     for city_id in city_ids:
         WeatherData.objects.create(
             user_id=user_id,
@@ -115,4 +123,6 @@ def test_get_weather_data(api_client, user_id, city_ids, mocker):
     response_get = api_client.get(url_get)
 
     assert response_get.status_code == status.HTTP_200_OK
-    assert len(response_get.data) == len(city_ids)
+    assert response_get.data['total-cities'] == len(city_ids)
+    assert response_get.data['progress'] == len(city_ids)
+    assert response_get.data['progress percentage'] == 100.0
