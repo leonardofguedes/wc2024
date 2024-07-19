@@ -26,6 +26,7 @@ DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
 OPEN_WEATHER_API_KEY=your_open_weather_api_key
 ```
+### Don't forget the OPEN_WEATHER_API!!!
 
 Running the Application
 Build and run the Docker containers:
@@ -47,6 +48,14 @@ Once the containers are up and running, open a new terminal and run:
 ```
 docker-compose exec web python manage.py migrate
 ```
+
+Re-run after migrations:
+```
+docker-compose up --build
+```
+
+And it's ready.
+
 
 Usage
 
