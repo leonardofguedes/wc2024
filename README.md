@@ -15,7 +15,7 @@ Installation
 
 Clone the repository:
 ```
-git clone https://github.com/yourusername/weather-service.git
+git clone https://github.com/leonardofguedes/wc2024.git
 ```
 ```
 cd weather-service
