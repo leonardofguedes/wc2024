@@ -1,0 +1,31 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: gunicorn weather.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - celery
+    environment:
+      - REDIS_HOST=redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A weather worker --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+
+networks:
+  default:
+    driver: bridge
