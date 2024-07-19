@@ -17,9 +17,6 @@ Clone the repository:
 ```
 git clone https://github.com/leonardofguedes/wc2024.git
 ```
-```
-cd weather-service
-```
 
 Create a .env file in the root directory and add the following environment variables:
 
